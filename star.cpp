@@ -17,6 +17,6 @@ void Star::move(float& dt) noexcept {
     this->y += this->speedy * dt;
 }
 
-void Star::render(const int nSegments) const {
-    filledCircle(x, y, radius, color[0], color[1], color[2], color[3], nSegments);
+void Star::render(const int* nSegments) const {
+    filledCircle(&x, &y, &radius, &color[0], &color[1], &color[2], &color[3], nSegments);
 }

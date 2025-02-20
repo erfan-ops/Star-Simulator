@@ -15,6 +15,11 @@
 
 constinit bool running = true;
 
+typedef struct FPOINT {
+	float x;
+	float y;
+};
+
 static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
 	if (msg == WM_TRAYICON) {
 		if (lParam == WM_RBUTTONUP) {
@@ -166,6 +171,7 @@ int CALLBACK WinMain(
 	float fractionalTime{ 0 };
 
 	POINT mousePos;
+	FPOINT fMousePos{};
 
 	Star* stars = new Star[settings.stars.count];
 
@@ -210,14 +216,14 @@ int CALLBACK WinMain(
 		glOrtho(0, Width, Height, 0, -1, 1);
 
 		GetCursorPos(&mousePos);
-		mousePos.x -= leftMost;
-		mousePos.y -= topMost;
+		fMousePos.x = static_cast<float>(mousePos.x - leftMost);
+		fMousePos.y = static_cast<float>(mousePos.y - topMost);
 
 		for (int starIdx = 0; starIdx < settings.stars.count; ++starIdx) {
 			Star& star = stars[starIdx];
 			star.move(dt);
 
-			star.render(settings.stars.segments);
+			star.render(&settings.stars.segments);
 
 			if (star.x < roffsetBounds) {
 				star.speedx = std::abs(star.speedx);
@@ -233,15 +239,15 @@ int CALLBACK WinMain(
 				star.speedy = -std::abs(star.speedy);
 			}
 
-			float mouse_dx = mousePos.x - star.x;
-			float mouse_dy = mousePos.y - star.y;
+			float mouse_dx = fMousePos.x - star.x;
+			float mouse_dy = fMousePos.y - star.y;
 			float distance_from_mouse_sqr = mouse_dx * mouse_dx + mouse_dy * mouse_dy;
 			if (distance_from_mouse_sqr && distance_from_mouse_sqr < MOUSE_RADIUS_SQR) {
 				float distance_from_mouse = std::sqrtf(distance_from_mouse_sqr);
 				float ratio = 1.0f - (distance_from_mouse / settings.mouseRadius);
 				float alpha = settings.lineColor[3] * ratio;
 				float lineWidth = ratio * DLINE_WIDTH + settings.lineMinWidth;
-				aaline(&settings.lineColor[0], &settings.lineColor[1], &settings.lineColor[2], &alpha, static_cast<float>(mousePos.x), static_cast<float>(mousePos.y), star.x, star.y, &lineWidth);
+				aaline(&settings.lineColor[0], &settings.lineColor[1], &settings.lineColor[2], &alpha, &fMousePos.x, &fMousePos.y, &star.x, &star.y, &lineWidth);
 			}
 		}
 
