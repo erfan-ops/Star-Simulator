@@ -13,7 +13,6 @@
 #include "star.h"
 #include "rendering.h"
 
-constexpr auto TAU_F = 6.2831853071f;
 constinit bool running = true;
 
 static LRESULT CALLBACK WindowProc(HWND hwnd, UINT msg, WPARAM wParam, LPARAM lParam) {
@@ -181,7 +180,9 @@ int CALLBACK WinMain(
 			randomUniform(roffsetBounds, woffsetBounds),
 			randomUniform(roffsetBounds, hoffsetBounds),
 			randomUniform(-settings.stars.maxSpeed, settings.stars.maxSpeed),
-			randomUniform(-settings.stars.maxSpeed, settings.stars.maxSpeed)
+			randomUniform(-settings.stars.maxSpeed, settings.stars.maxSpeed),
+			settings.stars.radius,
+			settings.stars.color
 		);
 	}
 
@@ -216,16 +217,7 @@ int CALLBACK WinMain(
 			Star& star = stars[starIdx];
 			star.move(dt);
 
-			glColor4f(settings.stars.color[0], settings.stars.color[1], settings.stars.color[2], settings.stars.color[3]); // Set color to blue
-			glBegin(GL_TRIANGLE_FAN); // Use GL_TRIANGLE_FAN to draw a filled circle
-			glVertex2f(star.x, star.y); // Center of the circle
-			for (int i = 0; i <= settings.stars.segments; i++) {
-				float theta = TAU_F * static_cast<float>(i) / static_cast<float>(settings.stars.segments); // Calculate the angle
-				float x = settings.stars.radius * cosf(theta); // Calculate x coordinate
-				float y = settings.stars.radius * sinf(theta); // Calculate y coordinate
-				glVertex2f(x + star.x, y + star.y); // Add the vertex to the circle
-			}
-			glEnd();
+			star.render(settings.stars.segments);
 
 			if (star.x < roffsetBounds) {
 				star.speedx = std::abs(star.speedx);
