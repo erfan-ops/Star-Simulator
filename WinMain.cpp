@@ -13,9 +13,11 @@
 #include "star.h"
 #include "rendering.h"
 
+#define TAU_F 6.2831853f
+
 constinit bool running = true;
 
-typedef struct FPOINT {
+struct FPOINT {
 	float x;
 	float y;
 };
@@ -182,14 +184,15 @@ int CALLBACK WinMain(
 
 	// Fill the array with Star objects
 	for (int i = 0; i < settings.stars.count; ++i) {
-		stars[i] = Star(
-			randomUniform(roffsetBounds, woffsetBounds),
-			randomUniform(roffsetBounds, hoffsetBounds),
-			randomUniform(-settings.stars.maxSpeed, settings.stars.maxSpeed),
-			randomUniform(-settings.stars.maxSpeed, settings.stars.maxSpeed),
-			settings.stars.radius,
-			settings.stars.color
-		);
+		Star& star = stars[i];
+		float speed = randomUniform(settings.stars.minSpeed, settings.stars.maxSpeed);
+		float angle = randomUniform(0, TAU_F);
+		star.x = randomUniform(roffsetBounds, woffsetBounds);
+		star.y = randomUniform(roffsetBounds, woffsetBounds);
+		star.speedx = cosf(angle)*speed;
+		star.speedy = sinf(angle)*speed;
+		star.radius = settings.stars.radius;
+		star.color = settings.stars.color;
 	}
 
 	auto newF = std::chrono::high_resolution_clock::now();

@@ -1,12 +1,13 @@
 #include "star.h"
 #include "rendering.h"
+#include <cmath>
 
 
-Star::Star(float x, float y, float speedx, float speedy, float radius, std::array<float, 4> color) :
+Star::Star(float x, float y, float speed, float angle, float radius, std::array<float, 4> color) :
     x(x),
     y(y),
-    speedx(speedx),
-    speedy(speedy),
+    speedx(std::cosf(angle)*speed),
+    speedy(std::sinf(angle)*speed),
     radius(radius),
     color(color)
 {}

@@ -15,6 +15,7 @@
     "segments": 8,
     "color": [ 1, 1, 1, 0.4 ],
     "count": 230,
+    "min-speed": 0,
     "max-speed": 20
   },
   "mouse-radius": 270

@@ -16,6 +16,7 @@ Settings loadSettings(const std::string& filename) {
 	settings.stars.segments = j["stars"]["segments"];
 	settings.stars.color = j["stars"]["color"].get<std::array<float, 4>>();
 	settings.stars.count = j["stars"]["count"];
+	settings.stars.minSpeed = j["stars"]["min-speed"];
 	settings.stars.maxSpeed = j["stars"]["max-speed"];
 	settings.lineColor = j["line-color"].get<std::array<float, 4>>();
 	settings.lineMinWidth = j["line-min-width"];

@@ -18,6 +18,7 @@ struct Settings {
 		int segments;
 		std::array<float, 4> color;
 		int count;
+		float minSpeed;
 		float maxSpeed;
 	} stars;
 
