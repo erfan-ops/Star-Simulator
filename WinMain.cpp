@@ -188,7 +188,7 @@ int CALLBACK WinMain(
 		float speed = randomUniform(settings.stars.minSpeed, settings.stars.maxSpeed);
 		float angle = randomUniform(0, TAU_F);
 		star.x = randomUniform(roffsetBounds, woffsetBounds);
-		star.y = randomUniform(roffsetBounds, woffsetBounds);
+		star.y = randomUniform(roffsetBounds, hoffsetBounds);
 		star.speedx = cosf(angle)*speed;
 		star.speedy = sinf(angle)*speed;
 		star.radius = settings.stars.radius;
@@ -229,16 +229,20 @@ int CALLBACK WinMain(
 			star.render(&settings.stars.segments);
 
 			if (star.x < roffsetBounds) {
+				star.x -= (star.x - roffsetBounds) * 2;
 				star.speedx = std::abs(star.speedx);
 			}
 			else if (star.x > woffsetBounds) {
+				star.x -= (star.x - woffsetBounds) * 2;
 				star.speedx = -std::abs(star.speedx);
 			}
 
 			if (star.y < roffsetBounds) {
+				star.y -= (star.y - roffsetBounds) * 2;
 				star.speedy = std::abs(star.speedy);
 			}
 			else if (star.y > hoffsetBounds) {
+				star.y -= (star.y - hoffsetBounds) * 2;
 				star.speedy = -std::abs(star.speedy);
 			}
 
